@@ -263,8 +263,10 @@ class UserSerializer(serializers.ModelSerializer):
 
     def get_joined_offers(self, obj):
         """Returns offers that user joined to"""
+        offers = obj.offer_set.all()
+        print(offers)
         return OfferSerializer(
-            [], many=True, context={'user': obj},
+            offers, many=True,
         ).data
 
 
