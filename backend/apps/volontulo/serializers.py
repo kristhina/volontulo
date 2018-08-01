@@ -233,7 +233,6 @@ class UserSerializer(serializers.ModelSerializer):
         read_only=True, source='userprofile.is_administrator',
     )
     organizations = serializers.SerializerMethodField()
-    joined_offers = serializers.SerializerMethodField()
     phone_no = serializers.CharField(
         max_length=32, source='userprofile.phone_no', required=False,
     )
@@ -258,17 +257,7 @@ class UserSerializer(serializers.ModelSerializer):
             'is_administrator',
             'organizations',
             'username',
-            'joined_offers',
         )
-
-    def get_joined_offers(self, obj):
-        """Returns offers that user joined to"""
-        offers = obj.offer_set.all()
-        print(offers)
-        return OfferSerializer(
-            offers, many=True,
-        ).data
-
 
     def get_organizations(self, obj):  # pylint:disable=no-self-use
         """Returns organizations that user belongs to."""

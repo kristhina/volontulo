@@ -42,6 +42,8 @@ from apps.volontulo.serializers import (
 )
 from apps.volontulo.views import logged_as_admin
 
+from apps.volontulo.serializers import OfferSerializer
+
 
 @api_view(['POST'])
 @authentication_classes((CsrfExemptSessionAuthentication,))
@@ -59,7 +61,7 @@ def login_view(request):
         login(request, user)
 
         return Response(
-            serializers.UserSerializer(user).data,
+            serializers.UserSerializer(user, context={'request': request}).data,
             status=status.HTTP_200_OK,
         )
 
@@ -349,3 +351,17 @@ class PasswordChangeView(APIView):
         user.set_password(data['password_new'])
         user.save()
         return Response({}, status.HTTP_200_OK)
+
+class JoinedOffers(APIView):
+    """Get all contact-related info and send contact message to admin."""
+    permission_classes = (IsAuthenticated,)
+    authentication_classes = (CsrfExemptSessionAuthentication,)
+
+    def get(self, request):  # pylint: disable=unused-argument
+        offers = request.user.offer_set.all()
+        return Response(
+            OfferSerializer(
+                offers, many=True, context={'request': request}
+            ).data,
+            status.HTTP_200_OK
+        )
