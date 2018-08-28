@@ -61,12 +61,18 @@ def login_view(request):
         login(request, user)
 
         return Response(
-            serializers.UserSerializer(user, context={'request': request}).data,
+            serializers.UserSerializer(
+                user,
+                context={'request': request},
+            ).data,
             status=status.HTTP_200_OK,
-        )
+        
 
     return Response(
-        serializers.UserSerializer(request.user).data,
+        serializers.UserSerializer(
+            request.user,
+            context={'request': request},
+        ).data,
         status=status.HTTP_400_BAD_REQUEST,
     )
 
@@ -315,7 +321,10 @@ class CurrentUser(APIView):
     def get(self, request):
         """Gets current user."""
         return Response(
-            serializers.UserSerializer(request.user).data,
+            serializers.UserSerializer(
+                request.user,
+                context={'request': request}
+            ).data,
             status=status.HTTP_200_OK,
         )
 
@@ -327,7 +336,10 @@ class CurrentUser(APIView):
         if serializer.is_valid(raise_exception=True):
             user = serializer.save()
             return Response(
-                serializers.UserSerializer(user).data,
+                serializers.UserSerializer(
+                    user,
+                    context={'request': request},
+                ).data,
                 status=status.HTTP_200_OK,
             )
 
