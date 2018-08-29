@@ -364,6 +364,7 @@ class PasswordChangeView(APIView):
         user.save()
         return Response({}, status.HTTP_200_OK)
 
+
 class JoinedOffers(APIView):
     """Get info about all offers that user joined."""
     permission_classes = (IsAuthenticated,)
