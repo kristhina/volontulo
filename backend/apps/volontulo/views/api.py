@@ -66,7 +66,7 @@ def login_view(request):
                 context={'request': request},
             ).data,
             status=status.HTTP_200_OK,
-        
+        )
 
     return Response(
         serializers.UserSerializer(
@@ -365,11 +365,11 @@ class PasswordChangeView(APIView):
         return Response({}, status.HTTP_200_OK)
 
 class JoinedOffers(APIView):
-    """Get all contact-related info and send contact message to admin."""
+    """Get info about all offers that user joined."""
     permission_classes = (IsAuthenticated,)
     authentication_classes = (CsrfExemptSessionAuthentication,)
 
-    def get(self, request):  # pylint: disable=unused-argument
+    def get(self, request):
         offers = request.user.offer_set.all()
         return Response(
             OfferSerializer(
