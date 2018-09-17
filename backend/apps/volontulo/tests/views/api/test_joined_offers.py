@@ -24,8 +24,10 @@ class TestJoinedOffers(APITestCase, TestCase):
         self.client.force_login(user=user)
 
         res = self.client.get(ENDPOINT_URL)
-        self.assertEqual(res.status_code, 200)  # tests status code
-        self.assertEqual(res.data, [])  # tests the length of the list of offers that user joined
+        # tests status code
+        self.assertEqual(res.status_code, 200)
+        # tests the length of the list of offers that user joined
+        self.assertEqual(res.data, [])
 
     def test_user_joined_one_offer(self):
         """Tests if user joined one offer"""
@@ -44,10 +46,14 @@ class TestJoinedOffers(APITestCase, TestCase):
         res_title = res.data[0]['title']
         offer_title = offer.title
 
-        self.assertEqual(res.status_code, 200)  # tests status code
-        self.assertEqual(len(res.data), 1)  # tests the length of the list of offers that user joined
-        self.assertEqual(res_id, offer_id)  # tests the id of the offer created and the offer that user joined
-        self.assertEqual(res_title, offer_title)  # tests the title of the offer created and the offer that user joined
+        # tests status code
+        self.assertEqual(res.status_code, 200)
+        # tests the length of the list of offers that user joined
+        self.assertEqual(len(res.data), 1)
+        # tests the id of the offer created and the offer that user joined
+        self.assertEqual(res_id, offer_id)
+        # tests the title of the offer created and the offer that user joined
+        self.assertEqual(res_title, offer_title)
 
     def test_user_joined_some_offers(self):
         """Tests if user joined more than one offer"""
@@ -62,5 +68,7 @@ class TestJoinedOffers(APITestCase, TestCase):
         offer3 = OfferFactory(image=None)  # offer that user is not going to join
 
         res = self.client.get(ENDPOINT_URL)
-        self.assertEqual(res.status_code, 200)  # tests status code
-        self.assertEqual(len(res.data), 2)  # tests the length of the list of offers that user joined
+        # tests status code
+        self.assertEqual(res.status_code, 200)
+        # tests the length of the list of offers that user joined
+        self.assertEqual(len(res.data), 2)
