@@ -19,25 +19,27 @@ class TestJoinedOffers(APITestCase, TestCase):
     def test_user_joined_no_offers(self):
 
         user = UserFactory()
-        self.client.login(username=user.username, password=user.password)
+        self.client.force_login(user=user)
 
-        res = self.client.get(ENDPOINT_URL, {'username': user.username, 'password': user.password}, format = 'json')
+        res = self.client.get(ENDPOINT_URL, {'username': user.username, 'password': user.password}, format='json')
+        self.assertEqual(res.status_code, 200)
         self.assertEqual(res.data, [])
 
     def test_user_joined_one_offer(self):
-        # import pdb;
-        # pdb.set_trace()
+
         user = UserFactory()
-        self.client.login(username=user.username, password=user.password)
-        offer = OfferFactory(
-            volunteers=[user]
-        )
-        res = self.client.get(ENDPOINT_URL, {'username': user.username, 'password': user.password}, format = 'json')
+        self.client.force_login(user=user)
+
+        offer = OfferFactory()
+        offer.volunteers.add(user)
+
+        res = self.client.get(ENDPOINT_URL, {'username': user.username, 'password': user.password}, format='json')
         self.assertEqual(len(res.data), 1)
 
     def test_user_joined_some_offers(self):
         user = UserFactory()
-        self.client.login(username=user.username, password=user.password)
+
+        self.client.force_login(user=user)
 
         offer1 = OfferFactory(
             volunteers=[user]
@@ -45,5 +47,5 @@ class TestJoinedOffers(APITestCase, TestCase):
         offer2 = OfferFactory(
             volunteers=[user]
         )
-        res = self.client.get(ENDPOINT_URL, {'username': user.username, 'password': user.password}, format = 'json')
+        res = self.client.get(ENDPOINT_URL, {'username': user.username, 'password': user.password}, format='json')
         self.assertEqual(len(res.data), 2)

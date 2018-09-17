@@ -1,0 +1,19 @@
+frontend:
+  image: codeforpoznan/volontulo-frontend
+  # build: frontend
+  command: bash docker-entrypoint.sh
+  # command: tail -f /dev/null
+  # command: npm run ssr
+  ports:
+    - 4200:4200
+  volumes:
+    - ./frontend:/volontulo/frontend
+
+db:
+  image: postgres
+  ports:
+    - 5432:5432
+  environment:
+    POSTGRES_DB: volontulo
+    POSTGRES_USER: volontulo
+    POSTGRES_PASSWORD: volontulo
