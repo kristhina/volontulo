@@ -65,7 +65,8 @@ class TestJoinedOffers(APITestCase, TestCase):
         offer1.volunteers.add(user)
         offer2 = OfferFactory(image=None)
         offer2.volunteers.add(user)
-        offer3 = OfferFactory(image=None)  # offer that user is not going to join
+        offer3 = OfferFactory(image=None)
+        # offer3 that user is not going to join
 
         res = self.client.get(ENDPOINT_URL)
         # tests status code
