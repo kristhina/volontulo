@@ -8,7 +8,7 @@ from django.test import TestCase
 from django.urls import reverse
 from rest_framework.test import APITestCase
 
-from apps.volontulo.factories import UserFactory, OrganizationFactory
+from apps.volontulo.factories import UserFactory
 from apps.volontulo.factories import OfferFactory
 
 ENDPOINT_URL = reverse('joined_offers')
@@ -23,9 +23,9 @@ class TestJoinedOffers(APITestCase, TestCase):
         user = UserFactory()
         self.client.force_login(user=user)
 
-        res = self.client.get(ENDPOINT_URL, {'username': user.username, 'password': user.password}, format='json')
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(res.data, [])
+        res = self.client.get(ENDPOINT_URL)
+        self.assertEqual(res.status_code, 200)  # tests status code
+        self.assertEqual(res.data, [])  # tests the length of the list of offers that user joined
 
     def test_user_joined_one_offer(self):
         """Tests if user joined one offer"""
@@ -36,9 +36,18 @@ class TestJoinedOffers(APITestCase, TestCase):
         offer = OfferFactory(image=None)
         offer.volunteers.add(user)
 
-        res = self.client.get(ENDPOINT_URL, {'username': user.username, 'password': user.password}, format='json')
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(len(res.data), 1)
+        res = self.client.get(ENDPOINT_URL)
+
+        res_id = res.data[0]['id']
+        offer_id = offer.id
+
+        res_title = res.data[0]['title']
+        offer_title = offer.title
+
+        self.assertEqual(res.status_code, 200)  # tests status code
+        self.assertEqual(len(res.data), 1)  # tests the length of the list of offers that user joined
+        self.assertEqual(res_id, offer_id)  # tests the id of the offer created and the offer that user joined
+        self.assertEqual(res_title, offer_title)  # tests the title of the offer created and the offer that user joined
 
     def test_user_joined_some_offers(self):
         """Tests if user joined more than one offer"""
@@ -50,8 +59,8 @@ class TestJoinedOffers(APITestCase, TestCase):
         offer1.volunteers.add(user)
         offer2 = OfferFactory(image=None)
         offer2.volunteers.add(user)
-        offer3 = OfferFactory(image=None)
+        offer3 = OfferFactory(image=None)  # offer that user is not going to join
 
-        res = self.client.get(ENDPOINT_URL, {'username': user.username, 'password': user.password}, format='json')
-        self.assertEqual(res.status_code, 200)
-        self.assertEqual(len(res.data), 2)
+        res = self.client.get(ENDPOINT_URL)
+        self.assertEqual(res.status_code, 200)  # tests status code
+        self.assertEqual(len(res.data), 2)  # tests the length of the list of offers that user joined
