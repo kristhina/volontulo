@@ -24,8 +24,10 @@ class TestJoinedOffers(APITestCase, TestCase):
         self.client.force_login(user=user)
 
         res = self.client.get(ENDPOINT_URL)
+
         # tests status code
         self.assertEqual(res.status_code, 200)
+
         # tests the length of the list of offers that user joined
         self.assertEqual(res.data, [])
 
@@ -48,10 +50,13 @@ class TestJoinedOffers(APITestCase, TestCase):
 
         # tests status code
         self.assertEqual(res.status_code, 200)
+
         # tests the length of the list of offers that user joined
         self.assertEqual(len(res.data), 1)
+
         # tests the id of the offer created and the offer that user joined
         self.assertEqual(res_id, offer_id)
+
         # tests the title of the offer created and the offer that user joined
         self.assertEqual(res_title, offer_title)
 
@@ -66,12 +71,15 @@ class TestJoinedOffers(APITestCase, TestCase):
         offer1.volunteers.add(user)
         offer2 = OfferFactory(image=None)
         offer2.volunteers.add(user)
+
+        # offer3 that only user1 is going to join
         offer3 = OfferFactory(image=None)
         offer3.volunteers.add(user1)
-        # offer3 that ony user1 is going to join
 
         res = self.client.get(ENDPOINT_URL)
+
         # tests status code
         self.assertEqual(res.status_code, 200)
+
         # tests the length of the list of offers that user joined
         self.assertEqual(len(res.data), 2)
