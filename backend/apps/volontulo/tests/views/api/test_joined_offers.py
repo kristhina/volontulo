@@ -59,6 +59,7 @@ class TestJoinedOffers(APITestCase, TestCase):
         """Tests if user joined more than one offer"""
 
         user = UserFactory()
+        user1 = UserFactory()
         self.client.force_login(user=user)
 
         offer1 = OfferFactory(image=None)
@@ -66,7 +67,8 @@ class TestJoinedOffers(APITestCase, TestCase):
         offer2 = OfferFactory(image=None)
         offer2.volunteers.add(user)
         offer3 = OfferFactory(image=None)
-        # offer3 that user is not going to join
+        offer3.volunteers.add(user1)
+        # offer3 that ony user1 is going to join
 
         res = self.client.get(ENDPOINT_URL)
         # tests status code
