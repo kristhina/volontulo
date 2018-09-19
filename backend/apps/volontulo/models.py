@@ -36,6 +36,11 @@ class Organization(models.Model):
     name = models.CharField(max_length=150, db_index=True)
     address = models.CharField(max_length=150)
     description = models.TextField()
+    image = models.ImageField(
+        upload_to=upload_to_offers,
+        null=True,
+        blank=True
+    )
 
     def __str__(self):
         """Organization model string reprezentation."""
