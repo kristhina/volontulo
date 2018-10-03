@@ -14,10 +14,10 @@ ENDPOINT_URL = reverse('joined_offers')
 
 
 class TestJoinedOffers(APITestCase):
-    """ Tests for joined-offers api"""
+    """Tests for joined-offers api."""
 
     def test_user_joined_no_offers(self):
-        """ Tests if user did not join any offer"""
+        """Tests if user did not join any offer."""
 
         user = UserFactory()
         self.client.force_login(user=user)
@@ -28,7 +28,7 @@ class TestJoinedOffers(APITestCase):
         self.assertEqual(res.data, [])
 
     def test_user_joined_one_offer(self):
-        """Tests if user joined one offer"""
+        """Tests if user joined one offer."""
 
         user = UserFactory()
         self.client.force_login(user=user)
@@ -44,10 +44,9 @@ class TestJoinedOffers(APITestCase):
         self.assertEqual(offer.title, res.data[0]['title'])
 
     def test_user_joined_some_offers(self):
-        """Tests if user joined more than one offer"""
+        """Tests if user joined more than one offer."""
 
         user = UserFactory()
-        user1 = UserFactory()
         self.client.force_login(user=user)
 
         offer1 = OfferFactory()
@@ -55,9 +54,8 @@ class TestJoinedOffers(APITestCase):
         offer2 = OfferFactory()
         offer2.volunteers.add(user)
 
-        # offer3 that only user1 is going to join
-        offer3 = OfferFactory()
-        offer3.volunteers.add(user1)
+        # offer that user did not join
+        OfferFactory(volunteers=UserFactory.create_batch(10))
 
         res = self.client.get(ENDPOINT_URL)
 
