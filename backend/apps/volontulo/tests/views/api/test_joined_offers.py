@@ -49,10 +49,7 @@ class TestJoinedOffers(APITestCase):
         user = UserFactory()
         self.client.force_login(user=user)
 
-        offer1 = OfferFactory()
-        offer1.volunteers.add(user)
-        offer2 = OfferFactory()
-        offer2.volunteers.add(user)
+        OfferFactory.create_batch(2, volunteers=[user])
 
         # offer that user did not join
         OfferFactory(volunteers=UserFactory.create_batch(10))
