@@ -22,6 +22,7 @@ class _TestOrganizationsListAPIView(TestOffersCommons, APITestCase):
             self.assertIsInstance(organization.pop('address'), str)
             self.assertIsInstance(organization.pop('description'), str)
             self.assertIsInstance(organization.pop('id'), int)
+            self.assertIsInstance(organization.pop('image'), str)
             self.assertIsInstance(organization.pop('name'), str)
             self.assertIsInstance(organization.pop('slug'), str)
             self.assertIsInstance(organization.pop('url'), str)

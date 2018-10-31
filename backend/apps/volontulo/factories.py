@@ -134,6 +134,10 @@ class OrganizationFactory(factory.DjangoModelFactory):
     name = factory.fuzzy.FuzzyAttribute(_organization_name)
     address = factory.Faker("address", locale="pl_PL")
     description = factory.Faker("paragraph")
+    image = ImageField(from_path=os.path.join(
+        os.path.dirname(__file__),
+        'static/volontulo/img/volontulo_baner.png'
+    ))
 
 
 def placeimg_com_download(width, height, category):

@@ -24,7 +24,11 @@ class Command(BaseCommand):
 
         self.stdout.write(self.style.SUCCESS('Creating 15 organizations'))
         for _ in tqdm(range(15)):
-            organization = OrganizationFactory.create()
+            organization = OrganizationFactory.create(
+                image=ImageField(
+                    from_func=placeimg_com_download(1000, 400, 'any')
+                )
+            )
             UserProfileFactory.create(
                 organizations=(organization,),
             )

@@ -31,9 +31,25 @@ class PasswordField(CharField):
         return data
 
 
+class ImageField(serializers.Field):
+
+    """Custom field for offer's image serialization."""
+
+    def to_representation(self, value):
+        """Transform internal value into serializer representation."""
+        return self.context['request'].build_absolute_uri(
+            location=value.url
+        ) if value else None
+
+    def to_internal_value(self, data):
+        """Transform  serializer representation into internal value."""
+        return io.BytesIO(base64.b64decode(data))
+
+
 class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
     """REST API organizations serializer."""
     slug = serializers.SerializerMethodField()
+    image = ImageField(allow_null=True, required=False)
 
     class Meta:
         model = models.Organization
@@ -41,6 +57,7 @@ class OrganizationSerializer(serializers.HyperlinkedModelSerializer):
             'address',
             'description',
             'id',
+            'image',
             'name',
             'slug',
             'url',
@@ -75,21 +92,6 @@ class OrganizationField(serializers.Field):
                 "Wartość organizacji ma zły format. "
                 "Użyj obiektu z atrybutem id organizacji."
             )
-
-
-class ImageField(serializers.Field):
-
-    """Custom field for offer's image serialization."""
-
-    def to_representation(self, value):
-        """Transform internal value into serializer representation."""
-        return self.context['request'].build_absolute_uri(
-            location=value.url
-        ) if value else None
-
-    def to_internal_value(self, data):
-        """Transform  serializer representation into internal value."""
-        return io.BytesIO(base64.b64decode(data))
 
 
 class OfferSerializer(serializers.HyperlinkedModelSerializer):

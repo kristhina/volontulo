@@ -101,6 +101,7 @@ def test_offer_list_fields(self, offer):
     self.assertIsInstance(offer['organization'].pop('address'), str)
     self.assertIsInstance(offer['organization'].pop('description'), str)
     self.assertIsInstance(offer['organization'].pop('id'), int)
+    self.assertIsInstance(offer['organization'].pop('image'), str)
     self.assertIsInstance(offer['organization'].pop('name'), str)
     self.assertIsInstance(offer['organization'].pop('slug'), str)
     self.assertIsInstance(offer['organization'].pop('url'), str)

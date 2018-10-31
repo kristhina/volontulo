@@ -31,13 +31,28 @@ def upload_to_offers(_, filename):
     )
 
 
+def upload_to_organizations(_, filename):
+    """
+    Upload to organizations path.
+
+    This needs to be a full-body func because
+    migrations requires it to be serializable.
+    """
+    _, file_extension = os.path.splitext(filename)
+    return os.path.join(
+        'organizations',
+        '{}{}'.format(uuid.uuid4(), file_extension),
+    )
+
+
 class Organization(models.Model):
     """Model that handles ogranizations/institutions."""
     name = models.CharField(max_length=150, db_index=True)
     address = models.CharField(max_length=150)
     description = models.TextField()
+
     image = models.ImageField(
-        upload_to=upload_to_offers,
+        upload_to=upload_to_organizations,
         null=True,
         blank=True
     )
